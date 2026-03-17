@@ -456,8 +456,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1rem;
-    justify-items: center;
-    align-items: start;
   }
   .cert-item {
     border: 1px solid var(--border);
@@ -465,11 +463,6 @@
     position: relative;
     background: var(--surface);
     transition: border-color 0.2s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    min-height: 170px;
   }
   .cert-item:hover { border-color: var(--accent2); }
   .cert-org {
@@ -673,6 +666,8 @@
       <p class="skill-cat-title">Frontend Development</p>
       <div class="skill-tags">
         <span class="skill-tag">HTML/CSS/JS</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Vue</span>
         <span class="skill-tag">Angular</span>
         <span class="skill-tag">WordPress REST API</span>
       </div>
@@ -681,7 +676,10 @@
       <p class="skill-cat-title">Backend Development</p>
       <div class="skill-tags">
         <span class="skill-tag">PHP (Laravel)</span>
+        <span class="skill-tag">CodeIgniter</span>
+        <span class="skill-tag">Node.js</span>
         <span class="skill-tag">MySQL</span>
+        <span class="skill-tag">PostgreSQL</span>
         <span class="skill-tag">Google Sheets API</span>
       </div>
     </div>
@@ -843,7 +841,7 @@
 <div class="divider"></div>
 
 <!-- CERTIFICATIONS -->
-<section id="certifications">
+<section id="projects">
   <p class="section-label reveal">// 05 Certifications</p>
   <h2 class="section-title reveal">Credentials</h2>
   <div class="certs-container">
