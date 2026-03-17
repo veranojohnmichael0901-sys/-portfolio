@@ -450,11 +450,8 @@
   }
 
   /* ─── CERTIFICATIONS ─── */
-  #certifications { background: var(--bg2); max-width: 100%; padding: 6rem 4rem; }
-  #certifications .section-label, #certifications .section-title { max-width: 1100px; margin-left: auto; margin-right: auto; }
-  #certifications .section-label { display: block; margin-bottom: 0.8rem; }
-  #certifications .section-title { display: block; margin-bottom: 3rem; }
-  .certs-container { max-width: 1100px; margin: 0 auto; }
+  #certifications { background: var(--bg2); max-width: 100%; padding: 6rem 0; }
+  .certs-container { padding-left: 4rem; padding-right: 4rem; max-width: 1100px; margin: 0 auto; }
   .cert-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -880,8 +877,8 @@
   <p class="reveal" style="color:var(--text2); text-align:center;">
     Open to new opportunities in software quality assurance, technical analysis, and IT infrastructure.
   </p>
-  <a href="/cdn-cgi/l/email-protection#8dfbe8ffece3e2e7e2e5e3e0e4eee5ece8e1bdb4bdbccdeae0ece4e1a3eee2e0" class="contact-email reveal">
-    <span class="__cf_email__" data-cfemail="ddabb8afbcb3b2b7b2b5b3b0b4beb5bcb8b1ede4edec9dbab0bcb4b1f3beb2b0">[email&#160;protected]</span>
+  <a href="mailto:veranojohnmichael0901@gmail.com" class="contact-email reveal">
+    veranojohnmichael0901@gmail.com
   </a>
   <div class="contact-links reveal">
     <a href="tel:+639106671470" class="contact-link">+63 910 667 1470</a>
@@ -896,7 +893,7 @@
   <p>Quezon City, Philippines &nbsp;·&nbsp; IT Professional</p>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries) => {
@@ -913,4 +910,14 @@
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a');
   window.addEventListener('scroll', () => {
-    let c
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+    });
+  });
+</script>
+</body>
+</html>
