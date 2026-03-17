@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>John Michael T. Verano — IT Professional</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #0f0f18;
+    --surface: #13131f;
+    --border: #1e1e2e;
+    --accent: #00e5b0;
+    --accent2: #6c63ff;
+    --muted: #5a5a7a;
+    --text: #e8e8f0;
+    --text2: #a0a0c0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lora', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+  }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text2);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,176,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,176,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+  }
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,176,0.07) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    animation: pulseGlow 6s ease-in-out infinite;
+  }
+  .hero-glow2 {
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(108,99,255,0.06) 0%, transparent 70%);
+    bottom: 0; left: 10%;
+    animation: pulseGlow 8s ease-in-out infinite reverse;
+  }
+  @keyframes pulseGlow {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.15); opacity: 1; }
+  }
+  .hero-content {
+    position: relative;
+    max-width: 800px;
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.35s forwards;
+  }
+  .hero-name span { color: var(--accent); }
+  .hero-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text2);
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+  .hero-desc {
+    font-size: 1.05rem;
+    color: var(--text2);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.65s forwards;
+  }
+  .hero-btns {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+  .btn-primary {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.85rem 2rem;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+  .btn-primary:hover { background: #00ffcc; transform: translateY(-2px); }
+  .btn-outline {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.85rem 2rem;
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    animation: fadeUp 1s 1.2s both;
+  }
+  .hero-scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--muted), transparent);
+    animation: scrollLine 2s 1.5s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    padding: 6rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    letter-spacing: 0.04em;
+    color: var(--text);
+    margin-bottom: 3rem;
+    line-height: 1;
+  }
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    margin: 0 auto;
+  }
+
+  /* ─── ABOUT ─── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .about-text p {
+    color: var(--text2);
+    margin-bottom: 1.2rem;
+  }
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .stat-card:hover { border-color: var(--accent); }
+  .stat-card:hover::before { opacity: 1; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ─── SKILLS ─── */
+  #skills { background: var(--bg2); max-width: 100%; padding: 6rem 0; }
+  #skills > * { max-width: 1100px; margin-left: auto; margin-right: auto; padding-left: 4rem; padding-right: 4rem; }
+  #skills .section-label, #skills .section-title { padding-left: 4rem; padding-right: 4rem; max-width: 1100px; margin: 0 auto; }
+  #skills .section-label { margin-bottom: 0.8rem; }
+  #skills .section-title { margin-bottom: 3rem; }
+
+  .skills-container { padding-left: 4rem; padding-right: 4rem; max-width: 1100px; margin: 0 auto; }
+  .skill-category {
+    margin-bottom: 2.5rem;
+  }
+  .skill-cat-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 1rem;
+  }
+  .skill-tags {
+    display: flex; flex-wrap: wrap; gap: 0.6rem;
+  }
+  .skill-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.4rem 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    letter-spacing: 0.06em;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .skill-tag:hover {
+    background: rgba(0,229,176,0.08);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ─── EXPERIENCE ─── */
+  .exp-list { display: flex; flex-direction: column; gap: 0; }
+  .exp-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 2rem;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .exp-item:first-child { border-top: 1px solid var(--border); }
+  .exp-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    line-height: 1.8;
+    padding-top: 0.15rem;
+  }
+  .exp-meta .exp-period { color: var(--accent); font-weight: 500; }
+  .exp-body {}
+  .exp-company {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    margin-bottom: 0.2rem;
+  }
+  .exp-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .exp-desc {
+    color: var(--text2);
+    font-size: 0.92rem;
+    line-height: 1.75;
+  }
+  .exp-tags {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .exp-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.6rem;
+    background: rgba(108,99,255,0.1);
+    border: 1px solid rgba(108,99,255,0.25);
+    color: var(--accent2);
+  }
+
+  /* ─── PROJECTS ─── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: default;
+  }
+  .project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,229,176,0.04), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .project-card:hover::after { opacity: 1; }
+  .project-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .project-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.25rem;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .project-desc {
+    font-size: 0.88rem;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+  }
+  .project-stack {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+  }
+  .project-tech {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    padding: 0.2rem 0.55rem;
+    background: rgba(0,229,176,0.07);
+    border: 1px solid rgba(0,229,176,0.15);
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+
+  /* ─── CERTIFICATIONS ─── */
+  #certifications { background: var(--bg2); max-width: 100%; padding: 6rem 0; }
+  .certs-container { padding-left: 4rem; padding-right: 4rem; max-width: 1100px; margin: 0 auto; }
+  .cert-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  .cert-item {
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    position: relative;
+    background: var(--surface);
+    transition: border-color 0.2s;
+  }
+  .cert-item:hover { border-color: var(--accent2); }
+  .cert-org {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 0.5rem;
+  }
+  .cert-name {
+    font-family: 'Lora', serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 0.4rem;
+  }
+  .cert-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+  }
+
+  /* ─── CONTACT ─── */
+  #contact {
+    text-align: center;
+    padding: 6rem 4rem 8rem;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .contact-email {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    text-decoration: none;
+    display: block;
+    margin: 2rem 0;
+    transition: opacity 0.2s;
+  }
+  .contact-email:hover { opacity: 0.7; }
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+  .contact-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text2);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.2rem;
+    transition: all 0.2s;
+  }
+  .contact-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    #hero { padding: 6rem 1.5rem 3rem; }
+    section { padding: 4rem 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+    .skills-container, .certs-container { padding-left: 1.5rem; padding-right: 1.5rem; }
+    #skills .section-label, #skills .section-title,
+    #certifications .section-label, #certifications .section-title { padding-left: 1.5rem; padding-right: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">JMV</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">// Based in Quezon City, Philippines</p>
+    <h1 class="hero-name">John Michael<br /><span>T. Verano</span></h1>
+    <p class="hero-title">IT QA Tester &nbsp;·&nbsp; Network Infrastructure &nbsp;·&nbsp; Full-Stack Developer</p>
+    <p class="hero-desc">
+      IT professional bridging quality assurance, network engineering, and software development.
+      Passionate about building reliable systems and ensuring seamless digital experiences.
+    </p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">Get In Touch</a>
+      <a href="#experience" class="btn-outline">View Experience</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label reveal">// 01 About</p>
+  <h2 class="section-title reveal">Who I Am</h2>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>
+        I'm an IT professional with a B.S. in Information Technology from Quezon City University (2021–2025),
+        specializing in QA testing, network infrastructure, and web development.
+      </p>
+      <p>
+        With hands-on experience in manual testing, Cisco Packet Tracer simulations, and full-stack development,
+        I bring a cross-functional perspective to every project — ensuring quality from the network layer up to the user interface.
+      </p>
+      <p>
+        Currently expanding my expertise in network infrastructure configuration, including Cisco routing protocols,
+        IPSec VPN, and enterprise Active Directory environments.
+      </p>
+    </div>
+    <div class="about-stats reveal">
+      <div class="stat-card">
+        <div class="stat-num">7+</div>
+        <div class="stat-label">Months QA Experience</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Certifications</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">BS</div>
+        <div class="stat-label">Information Technology</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">QC</div>
+        <div class="stat-label">Quezon City, PH</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label reveal">// 02 Skills</p>
+  <h2 class="section-title reveal">Technical Stack</h2>
+  <div class="skills-container">
+    <div class="skill-category reveal">
+      <p class="skill-cat-title">Quality Assurance</p>
+      <div class="skill-tags">
+        <span class="skill-tag">Manual QA Testing</span>
+        <span class="skill-tag">Test Case Design</span>
+        <span class="skill-tag">Bug Reporting</span>
+        <span class="skill-tag">Regression Testing</span>
+        <span class="skill-tag">Functional Testing</span>
+      </div>
+    </div>
+    <div class="skill-category reveal">
+      <p class="skill-cat-title">Frontend Development</p>
+      <div class="skill-tags">
+        <span class="skill-tag">HTML/CSS/JS</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Vue</span>
+        <span class="skill-tag">Angular</span>
+        <span class="skill-tag">WordPress REST API</span>
+      </div>
+    </div>
+    <div class="skill-category reveal">
+      <p class="skill-cat-title">Backend Development</p>
+      <div class="skill-tags">
+        <span class="skill-tag">PHP (Laravel)</span>
+        <span class="skill-tag">CodeIgniter</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">MySQL</span>
+        <span class="skill-tag">PostgreSQL</span>
+        <span class="skill-tag">Google Sheets API</span>
+      </div>
+    </div>
+    <div class="skill-category reveal">
+      <p class="skill-cat-title">Networking & Infrastructure</p>
+      <div class="skill-tags">
+        <span class="skill-tag">Cisco Packet Tracer</span>
+        <span class="skill-tag">GRE Tunnels</span>
+        <span class="skill-tag">IPSec VPN</span>
+        <span class="skill-tag">Zone-Based Firewall</span>
+        <span class="skill-tag">CBAC</span>
+        <span class="skill-tag">NAT / ACL</span>
+        <span class="skill-tag">Active Directory</span>
+        <span class="skill-tag">Windows Server 2022</span>
+        <span class="skill-tag">GPO Management</span>
+      </div>
+    </div>
+    <div class="skill-category reveal">
+      <p class="skill-cat-title">Tools & Platforms</p>
+      <div class="skill-tags">
+        <span class="skill-tag">GitHub</span>
+        <span class="skill-tag">VirtualBox</span>
+        <span class="skill-tag">Cybersecurity Fundamentals</span>
+        <span class="skill-tag">Data Analytics</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <p class="section-label reveal">// 03 Experience</p>
+  <h2 class="section-title reveal">Work History</h2>
+  <div class="exp-list">
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">2024 — Present</div>
+        <div>Quezon City, PH</div>
+      </div>
+      <div class="exp-body">
+        <div class="exp-company">VPD Business Solution Inc.</div>
+        <div class="exp-role">IT QA Tester</div>
+        <p class="exp-desc">
+          Conduct manual quality assurance testing across web applications, identifying defects and
+          ensuring software meets functional and non-functional requirements. Collaborate with
+          development teams to document test cases and provide detailed bug reports.
+        </p>
+        <div class="exp-tags">
+          <span class="exp-tag">Manual Testing</span>
+          <span class="exp-tag">Bug Tracking</span>
+          <span class="exp-tag">Test Documentation</span>
+          <span class="exp-tag">Web Applications</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Internship</div>
+        <div>Quezon City, PH</div>
+      </div>
+      <div class="exp-body">
+        <div class="exp-company">Hytech Power Inc.</div>
+        <div class="exp-role">Junior Web Developer Intern</div>
+        <p class="exp-desc">
+          Assisted in the development and maintenance of internal web systems. Gained hands-on
+          experience in frontend and backend technologies within a professional software environment.
+        </p>
+        <div class="exp-tags">
+          <span class="exp-tag">Web Development</span>
+          <span class="exp-tag">HTML/CSS</span>
+          <span class="exp-tag">JavaScript</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Internship</div>
+        <div>Philippines</div>
+      </div>
+      <div class="exp-body">
+        <div class="exp-company">Dept. of Agrarian Reform</div>
+        <div class="exp-role">Technical Support Intern</div>
+        <p class="exp-desc">
+          Provided technical support services within a government agency setting.
+          Assisted staff with hardware and software issues, contributing to uninterrupted daily operations.
+        </p>
+        <div class="exp-tags">
+          <span class="exp-tag">Technical Support</span>
+          <span class="exp-tag">IT Operations</span>
+          <span class="exp-tag">Government Sector</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-label reveal">// 04 Projects</p>
+  <h2 class="section-title reveal">Selected Work</h2>
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="project-icon">🌐</div>
+      <div class="project-name">HELMA Finance Network</div>
+      <p class="project-desc">
+        Full enterprise network simulation in Cisco Packet Tracer for a multi-branch organization.
+        Implemented GRE tunnels, IPSec VPN, Zone-Based Firewall, CBAC, NAT, and ACLs.
+      </p>
+      <div class="project-stack">
+        <span class="project-tech">Cisco Packet Tracer</span>
+        <span class="project-tech">GRE / IPSec</span>
+        <span class="project-tech">ZBF</span>
+        <span class="project-tech">CBAC</span>
+        <span class="project-tech">NAT / ACL</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-icon">🏢</div>
+      <div class="project-name">Active Directory Home Lab</div>
+      <p class="project-desc">
+        Deployed a Windows Server 2022 domain controller with Windows 11 Enterprise client.
+        Configured OUs, GPOs, and domain join over VirtualBox internal network.
+      </p>
+      <div class="project-stack">
+        <span class="project-tech">Windows Server 2022</span>
+        <span class="project-tech">Active Directory</span>
+        <span class="project-tech">GPO</span>
+        <span class="project-tech">VirtualBox</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-icon">💻</div>
+      <div class="project-name">Full-Stack Web Projects</div>
+      <p class="project-desc">
+        Developed and maintained web applications using React, Vue, Laravel, and Node.js.
+        Integrated external APIs including Google Sheets and WordPress REST API.
+      </p>
+      <div class="project-stack">
+        <span class="project-tech">React</span>
+        <span class="project-tech">Vue</span>
+        <span class="project-tech">Laravel</span>
+        <span class="project-tech">Node.js</span>
+        <span class="project-tech">MySQL</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <p class="section-label reveal">// 05 Certifications</p>
+  <h2 class="section-title reveal">Credentials</h2>
+  <div class="certs-container">
+    <div class="cert-list">
+      <div class="cert-item reveal">
+        <div class="cert-org">Cisco</div>
+        <div class="cert-name">Data Analytics Essentials</div>
+        <div class="cert-year">2024</div>
+      </div>
+      <div class="cert-item reveal">
+        <div class="cert-org">Online Learning</div>
+        <div class="cert-name">Web Development 101 Front End</div>
+        <div class="cert-year">2024</div>
+      </div>
+      <div class="cert-item reveal">
+        <div class="cert-org">FWD Community Day</div>
+        <div class="cert-name">Basic GitHub Processes</div>
+        <div class="cert-year">2023</div>
+      </div>
+      <div class="cert-item reveal">
+        <div class="cert-org">Fortinet</div>
+        <div class="cert-name">Certified Fundamentals in Cybersecurity</div>
+        <div class="cert-year">2021 — 2024</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label reveal" style="text-align:center">// 06 Contact</p>
+  <h2 class="section-title reveal" style="text-align:center">Let's Connect</h2>
+  <p class="reveal" style="color:var(--text2); text-align:center;">
+    Open to new opportunities in software quality assurance, technical analysis, and IT infrastructure.
+  </p>
+  <a href="mailto:veranojohnmichael0901@gmail.com" class="contact-email reveal">
+    veranojohnmichael0901@gmail.com
+  </a>
+  <div class="contact-links reveal">
+    <a href="tel:+639106671470" class="contact-link">+63 910 667 1470</a>
+    <a href="https://github.com" class="contact-link" target="_blank">GitHub</a>
+    <a href="https://linkedin.com" class="contact-link" target="_blank">LinkedIn</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 John Michael T. Verano</p>
+  <p>Quezon City, Philippines &nbsp;·&nbsp; IT Professional</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => io.observe(el));
+
+  // Active nav link
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+    });
+  });
+</script>
+</body>
+</html>
