@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>John Michael T. Verano — IT Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0c10;
+    --bg2: #0e1118;
+    --bg3: #141822;
+    --accent: #00e5ff;
+    --accent2: #7b2fff;
+    --accent3: #ff5e6c;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --border: rgba(0,229,255,0.12);
+    --card: rgba(20,24,34,0.85);
+    --glow: 0 0 40px rgba(0,229,255,0.08);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.35;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 2px; }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(10,12,16,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+  .nav-logo span { color: var(--muted); }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 3rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(123,47,255,0.12) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    pointer-events: none;
+  }
+  .hero-glow2 {
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,255,0.08) 0%, transparent 70%);
+    bottom: 0; left: 200px;
+    pointer-events: none;
+  }
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 40px; height: 1px;
+    background: var(--accent);
+  }
+  .hero-name {
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.4s forwards;
+  }
+  .hero-name .first { color: var(--text); }
+  .hero-name .last {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--accent);
+    display: block;
+  }
+  .hero-desc {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--muted);
+    max-width: 540px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.6s forwards;
+  }
+  .hero-desc strong { color: var(--accent); font-weight: 400; }
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.8s forwards;
+  }
+  .btn-primary {
+    padding: 0.85rem 2rem;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary:hover { box-shadow: 0 0 30px rgba(0,229,255,0.4); }
+  .btn-ghost {
+    padding: 0.85rem 2rem;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-stats {
+    position: absolute;
+    right: 3rem; bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    opacity: 0;
+    animation: fadeLeft 0.6s 1s forwards;
+  }
+  .stat {
+    text-align: right;
+    border-right: 2px solid var(--accent);
+    padding-right: 1rem;
+  }
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* SECTION BASE */
+  section { padding: 6rem 3rem; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3.5rem;
+  }
+  .section-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+  }
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 200px;
+  }
+
+  /* ABOUT */
+  #about { background: var(--bg2); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .about-text p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.9;
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+  }
+  .about-text p strong { color: var(--text); font-weight: 700; }
+  .about-contact {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .contact-item .icon {
+    color: var(--accent);
+    font-size: 0.9rem;
+    width: 20px;
+    text-align: center;
+  }
+  .about-skills {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .skill-bar-item { }
+  .skill-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.05em;
+  }
+  .skill-bar-track {
+    height: 3px;
+    background: var(--bg3);
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    width: 0;
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* EXPERIENCE */
+  #experience { background: var(--bg); }
+  .exp-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .exp-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .exp-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--accent2), var(--accent));
+  }
+  .exp-card:hover {
+    border-color: rgba(0,229,255,0.3);
+    transform: translateX(4px);
+  }
+  .exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .exp-role {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .exp-period {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    background: rgba(0,229,255,0.08);
+    padding: 0.25rem 0.75rem;
+    letter-spacing: 0.1em;
+  }
+  .exp-company {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+  }
+  .exp-type {
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: var(--accent2);
+    background: rgba(123,47,255,0.1);
+    padding: 0.15rem 0.5rem;
+    margin-left: 0.5rem;
+    text-transform: uppercase;
+  }
+  .exp-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .exp-bullets li {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.7;
+    padding-left: 1.2rem;
+    position: relative;
+  }
+  .exp-bullets li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+  .exp-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+  }
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* SKILLS */
+  #skills { background: var(--bg2); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .skill-category {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.8rem;
+    transition: border-color 0.3s;
+  }
+  .skill-category:hover { border-color: rgba(0,229,255,0.3); }
+  .skill-cat-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .skill-cat-title .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .skill-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .skill-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.75rem;
+    background: rgba(0,229,255,0.05);
+    border: 1px solid rgba(0,229,255,0.1);
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .skill-chip:hover {
+    background: rgba(0,229,255,0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* EDUCATION */
+  #education { background: var(--bg); }
+  .edu-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2.5rem;
+    max-width: 700px;
+    position: relative;
+  }
+  .edu-card::after {
+    content: 'B.S.I.T';
+    position: absolute;
+    right: 2rem; top: 1.5rem;
+    font-size: 4rem;
+    font-weight: 800;
+    color: rgba(0,229,255,0.04);
+    letter-spacing: -0.05em;
+    pointer-events: none;
+  }
+  .edu-school {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .edu-degree {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+  .edu-period {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+  .edu-capstone-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent2);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .edu-capstone {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.7;
+    border-left: 2px solid var(--accent2);
+    padding-left: 1rem;
+  }
+
+  /* CERTIFICATES */
+  #certificates { background: var(--bg2); }
+  .cert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .cert-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .cert-card:hover {
+    border-color: rgba(0,229,255,0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+  .cert-org {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .cert-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+  .cert-year {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .cert-highlights {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .cert-highlights li {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    padding-left: 0.9rem;
+    position: relative;
+    line-height: 1.5;
+  }
+  .cert-highlights li::before {
+    content: '─';
+    position: absolute;
+    left: 0;
+    color: var(--accent2);
+  }
+  .cert-badge {
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    width: 32px; height: 32px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+
+  /* CONTACT */
+  #contact {
+    background: var(--bg);
+    text-align: center;
+  }
+  .contact-big {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+  .contact-big .hl { color: var(--accent); }
+  .contact-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 3rem;
+    line-height: 1.8;
+  }
+  .contact-cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .contact-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    text-align: left;
+    min-width: 200px;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+  .contact-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+  }
+  .contact-card .cc-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+  .contact-card .cc-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+  footer .accent { color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* MOBILE NAV HAMBURGER */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--accent);
+    transition: all 0.3s;
+  }
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 60px; left: 0; right: 0;
+    background: rgba(10,12,16,0.97);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    z-index: 99;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .mobile-menu a:hover { color: var(--accent); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    section { padding: 4rem 1.5rem; }
+    #hero { padding: 7rem 1.5rem 4rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .hero-stats { display: none; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+  @media (max-width: 600px) {
+    .cert-grid, .skills-grid { grid-template-columns: 1fr; }
+    .hero-btns { flex-direction: column; }
+    .contact-cards { flex-direction: column; align-items: center; }
+    .section-title { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">JMV<span>.dev</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#certificates">Certs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:veranojohnmichael0901@gmail.com" class="nav-cta">Hire Me</a>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#experience" onclick="closeMenu()">Experience</a>
+  <a href="#skills" onclick="closeMenu()">Skills</a>
+  <a href="#education" onclick="closeMenu()">Education</a>
+  <a href="#certificates" onclick="closeMenu()">Certificates</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-tag">IT QA Tester &amp; Aspiring Developer</div>
+  <h1 class="hero-name">
+    <span class="first">John Michael</span>
+    <span class="last">Verano.</span>
+  </h1>
+  <p class="hero-desc">
+    Based in <strong>Quezon City, Philippines</strong>. I test, debug, and build web systems — bridging QA precision with full-stack development curiosity. Experienced in <strong>PHP/Laravel, AJAX, SQL</strong>, and integrations.
+  </p>
+  <div class="hero-btns">
+    <a href="#experience" class="btn-primary">View My Work</a>
+    <a href="#contact" class="btn-ghost">Get In Touch</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">3+</div>
+      <div class="stat-label">Work Roles</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Certifications</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">BS</div>
+      <div class="stat-label">Information Technology</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <span class="section-num">01 /</span>
+    <h2 class="section-title">About Me</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>
+        I'm <strong>John Michael T. Verano</strong>, an IT professional with hands-on experience in <strong>QA Testing, web development, and system integrations</strong>. I graduated with a BS in Information Technology from Quezon City University in 2025.
+      </p>
+      <p>
+        At VPD Business Solution Inc., I designed and executed test cases across functional, regression, and UAT scopes — while also contributing to backend CRUD operations using <strong>Laravel/PHP</strong> and <strong>jQuery AJAX</strong>.
+      </p>
+      <p>
+        I'm passionate about bridging the gap between <strong>quality assurance</strong> and <strong>software development</strong>, with a growing interest in full-stack roles and systems architecture.
+      </p>
+      <div class="about-contact">
+        <div class="contact-item"><span class="icon">✉</span>veranojohnmichael0901@gmail.com</div>
+        <div class="contact-item"><span class="icon">📱</span>+63 910 667 1470</div>
+        <div class="contact-item"><span class="icon">📍</span>Quezon City, Philippines</div>
+      </div>
+    </div>
+    <div class="about-skills">
+      <div style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--muted);letter-spacing:0.15em;margin-bottom:1.5rem;text-transform:uppercase;">Proficiency Overview</div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-label"><span>Manual QA Testing</span><span>90%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-label"><span>PHP / Laravel</span><span>70%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="70"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-label"><span>JavaScript / AJAX</span><span>72%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="72"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-label"><span>HTML / CSS</span><span>85%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="85"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-label"><span>MySQL / SQL</span><span>75%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="75"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-label"><span>Networking / Sysadmin</span><span>65%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill" data-width="65"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header">
+    <span class="section-num">02 /</span>
+    <h2 class="section-title">Experience</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="exp-list">
+
+    <div class="exp-card">
+      <div class="exp-header">
+        <div>
+          <div class="exp-role">IT QA Tester <span class="exp-type">Full-time</span></div>
+          <div class="exp-company">VPD Business Solution Inc. — Quezon City</div>
+        </div>
+        <div class="exp-period">2025 – 2026</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Designed, documented, and executed manual test cases for Functional, Regression, and UAT across multiple modules.</li>
+        <li>Logged, tracked, and validated defects with clear reproduction steps, expected vs. actual results, and evidence; coordinated with devs for fix/retest until closure.</li>
+        <li>Contributed to dev integrations: basic CRUD with Laravel (PHP), minor debugging, jQuery AJAX improvements, and data sync via Google Sheets API / Apps Script / WordPress REST API.</li>
+        <li>Assisted in vending machine maintenance including Wi-Fi troubleshooting, system reconfiguration, and product inventory management via GrabNGo Bar interface.</li>
+      </ul>
+      <div class="exp-tags">
+        <span class="tag">Laravel</span>
+        <span class="tag">PHP</span>
+        <span class="tag">jQuery</span>
+        <span class="tag">AJAX</span>
+        <span class="tag">Google Sheets API</span>
+        <span class="tag">WordPress REST API</span>
+        <span class="tag">QA Testing</span>
+        <span class="tag">Defect Tracking</span>
+      </div>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-header">
+        <div>
+          <div class="exp-role">Technical Support Intern <span class="exp-type">Internship</span></div>
+          <div class="exp-company">Department of Agrarian Reform</div>
+        </div>
+        <div class="exp-period">2025</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Assisted in troubleshooting and resolving hardware and network issues across multiple departments, ensuring minimal downtime.</li>
+        <li>Supported installation, configuration, and maintenance of desktop systems, printers, and office equipment.</li>
+        <li>Documented technical issues and coordinated with the IT team for timely resolution and follow-up.</li>
+      </ul>
+      <div class="exp-tags">
+        <span class="tag">Hardware Support</span>
+        <span class="tag">Network Troubleshooting</span>
+        <span class="tag">Documentation</span>
+      </div>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-header">
+        <div>
+          <div class="exp-role">Junior Web Developer Intern <span class="exp-type">Internship</span></div>
+          <div class="exp-company">Hytech Power Inc.</div>
+        </div>
+        <div class="exp-period">2024</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Built an informative website using the Angular framework with responsive web interfaces using HTML, CSS, and JavaScript for power industry applications.</li>
+        <li>Assisted in debugging code and identifying UI/UX issues across multiple browsers and devices.</li>
+      </ul>
+      <div class="exp-tags">
+        <span class="tag">Angular</span>
+        <span class="tag">HTML</span>
+        <span class="tag">CSS</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">Responsive Design</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <span class="section-num">03 /</span>
+    <h2 class="section-title">Skills</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-category">
+      <div class="skill-cat-title"><span class="dot"></span>Quality Assurance</div>
+      <div class="skill-items">
+        <span class="skill-chip">Functional Testing</span>
+        <span class="skill-chip">Regression Testing</span>
+        <span class="skill-chip">UAT</span>
+        <span class="skill-chip">Defect Reporting</span>
+        <span class="skill-chip">Test Case Design</span>
+        <span class="skill-chip">Bug Tracking</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-title"><span class="dot" style="background:var(--accent2)"></span>Frontend</div>
+      <div class="skill-items">
+        <span class="skill-chip">HTML5</span>
+        <span class="skill-chip">CSS3</span>
+        <span class="skill-chip">JavaScript</span>
+        <span class="skill-chip">jQuery / AJAX</span>
+        <span class="skill-chip">Angular</span>
+        <span class="skill-chip">Responsive Design</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-title"><span class="dot" style="background:var(--accent3)"></span>Backend & Databases</div>
+      <div class="skill-items">
+        <span class="skill-chip">PHP</span>
+        <span class="skill-chip">Laravel</span>
+        <span class="skill-chip">MySQL</span>
+        <span class="skill-chip">SQL Workbench</span>
+        <span class="skill-chip">Google Sheets API</span>
+        <span class="skill-chip">Apps Script</span>
+        <span class="skill-chip">WordPress REST API</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-title"><span class="dot" style="background:#ffd700"></span>Networking & Sysadmin</div>
+      <div class="skill-items">
+        <span class="skill-chip">Cisco Packet Tracer</span>
+        <span class="skill-chip">Network Design</span>
+        <span class="skill-chip">Active Directory</span>
+        <span class="skill-chip">Windows Server</span>
+        <span class="skill-chip">GPO Management</span>
+        <span class="skill-chip">VirtualBox</span>
+        <span class="skill-chip">Tailscale VPN</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-title"><span class="dot" style="background:#00ffaa"></span>Tools & Documentation</div>
+      <div class="skill-items">
+        <span class="skill-chip">Git / GitHub</span>
+        <span class="skill-chip">MS Office</span>
+        <span class="skill-chip">ERD / DFD</span>
+        <span class="skill-chip">Flowcharts</span>
+        <span class="skill-chip">Agent DVR</span>
+        <span class="skill-chip">CCTV Config</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-title"><span class="dot" style="background:#ff9f43"></span>Soft Skills</div>
+      <div class="skill-items">
+        <span class="skill-chip">Attention to Detail</span>
+        <span class="skill-chip">Problem Solving</span>
+        <span class="skill-chip">Communication</span>
+        <span class="skill-chip">Teamwork</span>
+        <span class="skill-chip">Time Management</span>
+        <span class="skill-chip">Quick Learner</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-header">
+    <span class="section-num">04 /</span>
+    <h2 class="section-title">Education</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="edu-card">
+    <div class="edu-school">Quezon City University</div>
+    <div class="edu-degree">Bachelor of Science in Information Technology</div>
+    <div class="edu-period">2021 – 2025 · QCU Main Campus</div>
+    <div class="edu-capstone-label">Capstone Project</div>
+    <div class="edu-capstone">
+      <strong style="color:var(--text)">FloodPing</strong> — Integrated IoT-Enabled Flood Forecasting, Real-Time Monitoring, and Multichannel Early Warning System for Enhanced Disaster Preparedness and Response for Barangay Bagbag, Quezon City.
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATES -->
+<section id="certificates">
+  <div class="section-header">
+    <span class="section-num">05 /</span>
+    <h2 class="section-title">Certifications</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="cert-grid">
+
+    <div class="cert-card">
+      <div class="cert-badge">📊</div>
+      <div class="cert-org">Cisco Networking Academy</div>
+      <div class="cert-title">Data Analytics Essentials</div>
+      <div class="cert-year">2024</div>
+      <ul class="cert-highlights">
+        <li>Data collection, cleaning & preprocessing</li>
+        <li>Statistical analysis & interpretation</li>
+        <li>Data structures: CSV, JSON, XML</li>
+        <li>Machine learning & predictive modeling basics</li>
+      </ul>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-badge">🌐</div>
+      <div class="cert-org">Online Learning Platform</div>
+      <div class="cert-title">Web Development 101: Building Your First Front End</div>
+      <div class="cert-year">2024</div>
+      <ul class="cert-highlights">
+        <li>HTML5 structure & semantic markup</li>
+        <li>CSS3 styling, layout & responsive design</li>
+        <li>JavaScript for interactivity</li>
+        <li>Web standards & accessibility best practices</li>
+      </ul>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-badge">⚙️</div>
+      <div class="cert-org">FWD Community Day</div>
+      <div class="cert-title">Basic GitHub Processes</div>
+      <div class="cert-year">2023</div>
+      <ul class="cert-highlights">
+        <li>Git vs GitHub platform concepts</li>
+        <li>Basic Git workflow: working dir, staging, repo</li>
+        <li>Installing & configuring Git locally</li>
+        <li>Commit tracking with username & email</li>
+      </ul>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-badge">🔒</div>
+      <div class="cert-org">Fortinet</div>
+      <div class="cert-title">Certified Fundamentals in Cybersecurity</div>
+      <div class="cert-year">2021 – 2024</div>
+      <ul class="cert-highlights">
+        <li>CIA Triad: Confidentiality, Integrity, Availability</li>
+        <li>Threat landscape & attack vectors</li>
+        <li>Risk assessment & vulnerability management</li>
+        <li>Security frameworks: NIST, ISO 27001</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <h2 class="contact-big">Let's Work<br><span class="hl">Together.</span></h2>
+  <p class="contact-sub">Open to QA, developer, and IT roles.<br>Feel free to reach out anytime.</p>
+  <div class="contact-cards">
+    <a class="contact-card" href="mailto:veranojohnmichael0901@gmail.com">
+      <span class="cc-label">Email</span>
+      <span class="cc-val">veranojohnmichael0901@gmail.com</span>
+    </a>
+    <a class="contact-card" href="tel:+639106671470">
+      <span class="cc-label">Phone</span>
+      <span class="cc-val">+63 910 667 1470</span>
+    </a>
+    <div class="contact-card">
+      <span class="cc-label">Location</span>
+      <span class="cc-val">Quezon City, Philippines</span>
+    </div>
+  </div>
+  <a href="mailto:veranojohnmichael0901@gmail.com" class="btn-primary" style="display:inline-block">Send a Message →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 <span class="accent">John Michael T. Verano</span>. All rights reserved.</p>
+  <p>Built with <span class="accent">HTML · CSS · JS</span></p>
+</footer>
+
+<script>
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // Skill bar animation on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+          bar.style.width = bar.dataset.width + '%';
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const aboutSection = document.getElementById('about');
+  if (aboutSection) observer.observe(aboutSection);
+
+  // Fade in on scroll
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.exp-card, .cert-card, .skill-category, .edu-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease, border-color 0.3s';
+    fadeObserver.observe(el);
+  });
+</script>
+</body>
+</html>
